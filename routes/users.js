@@ -11,8 +11,8 @@ var OTP =require("../models/otpModels")
 var transporter = nodemailer.createTransport({
   service: 'gmail', // You can use other services or SMTP settings
   auth: {
-    user: 'takohclovert7@gmail.com', // Your email address
-    pass: 'mkma gpwi clpj iscd'   // Your email password or an app-specific password
+    user: process.env.MY_EMAIL, // Your email address
+    pass: process.env.PASSWORD   // Your email password or an app-specific password
   }
 });     
    
