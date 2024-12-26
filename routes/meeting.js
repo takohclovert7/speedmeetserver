@@ -80,24 +80,36 @@ console.log(req.body)
 
 // Add a member to the meeting
 router.post('/start/meeting', async (req, res) => {
-  const {meetingId , name, email } = req.body;
+  const { meetingId, name, email } = req.body;
 
   if (!name || !email) {
     return res.status(400).json({ error: 'Name and email are required.' });
   }
-        
+
   try {
     // Find the meeting by ID
     const meeting = await Meeting.findOne({ meetingId });
     if (!meeting) {
       return res.status(404).json({ error: 'Meeting not found.' });
-    }   
-     
+    }
+
+    // Check the current date against meeting dates
+    const now = new Date();
+    const startDate = new Date(meeting.startDate);
+    const endDate = new Date(meeting.endDate);
+
+    if (now < startDate) {
+      return res.status(401).json({ message: 'The meeting has not started yet.' });
+    }
+
+    if (now > endDate) {
+      return res.status(402).json({ message: 'The meeting has ended.' });
+    }
+
     // Check for duplicate email
     const isMemberExists = meeting.members.some(member => member.email === email);
     if (isMemberExists) {
-      // return res.status(400).json({ error: 'Member with this email already exists.' });
-      return res.status(200).json({ message: 'Member added successfully.', meeting });
+      return res.status(200).json({ meeting, message: 'Member already exists in the meeting.' });
     }
 
     // Add the new member
@@ -106,11 +118,12 @@ router.post('/start/meeting', async (req, res) => {
     // Save the updated meeting
     await meeting.save();
 
-    res.status(200).json({ message: 'Member added successfully.', meeting });
+    res.status(200).json({ meeting, message: 'Member added successfully.' });
   } catch (error) {
-    console.log('Error adding member:', error);
+    console.error('Error adding member:', error);
     res.status(500).json({ error: 'Internal server error.' });
   }
 });
+
 
 module.exports = router;

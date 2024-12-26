@@ -43,7 +43,7 @@ router.post('/signup', async function(req, res, next) {
     }
 
     var mailOptions = {
-      from: '"no-reply @SpeedMeet " <service@speedmeet.com>', // Sender's name and email
+      from: '"no-reply @TalkEase.com " <no-reply@TalkEase.com >', // Sender's name and email
       to: newUser.email, // List of receivers
       subject: 'Email Verification', // Subject line
       text: `This is your email verification code ${newUser.verificationCode}. Code expires in 90 seconds` // Plain text body
@@ -142,7 +142,7 @@ router.post('/resend/otp',async function(req,res,next){
     );
     if (result) {
         var mailOptions = {
-          from: '"no-reply @SpeedMeet " <service@speedmeet.com>', // Sender's name and email
+          from: '"no-reply @TalkEase.com " <no-reply@TalkEase.com >', // Sender's name and email
           to: result.email, // List of receivers
           subject: 'Email Verification', // Subject line
           text: `This is your email verification code ${result.verificationCode}. Code expires in 90 seconds` // Plain text body
@@ -194,7 +194,7 @@ router.post("/login",async function(req,res,next){
 
       // Send verification email
       const mailOptions = {
-        from: '"no-reply @SpeedMeet " <service@speedmeet.com>', // Sender's name and email
+              from: '"no-reply @TalkEase.com " <no-reply@TalkEase.com >', // Sender's name and email
         to: user.email,
         subject: 'Account Activation code',
         text: `Your verification code is ${verificationCode}. This code expires in 90 seconds`,
@@ -260,7 +260,7 @@ console.log({email})
 
       // Send verification email
       const mailOptions = {
-        from: '"no-reply @SpeedMeet " <service@speedmeet.com>', // Sender's name and email
+        from: '"no-reply @TalkEase.com " <no-reply@TalkEase.com >', // Sender's name and email
         to: user.email,
         subject: 'Password reset code',
         text: `Your verification code is ${otp.otpCode}. This code expires in 90 seconds`,
@@ -342,11 +342,11 @@ router.put('/forget-password/update-password', async (req, res) => {
 
 router.put("/update/profile/info",async function (req,res,next) {
   try {
-    const { email, name} = req.body;
+    const { email, name, emailMain} = req.body;
 // console.log(req.body)
     // Find the user by email and update the fields
     const updatedUser = await User.findOneAndUpdate(
-      { email: email }, // Condition to find the user by email
+      { email:  emailMain }, // Condition to find the user by email
       {
         name,        // Update name
         email,       // Update email
